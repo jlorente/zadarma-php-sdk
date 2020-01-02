@@ -121,8 +121,8 @@ abstract class Api implements ApiInterface
     public function execute($httpMethod, $url, array $parameters = [])
     {
         try {
-
-            $response = $this->getClient()->{$httpMethod}('/' . $url, $this->prepareParameters($httpMethod, $url, $parameters));
+            $endpoint = $this->prefixString($url, '/');
+            $response = $this->getClient()->{$httpMethod}($endpoint, $this->prepareParameters($httpMethod, $endpoint, $parameters));
 
             return json_decode((string) $response->getBody(), true);
         } catch (ClientException $e) {
@@ -138,11 +138,11 @@ abstract class Api implements ApiInterface
      * @param array $parameters
      * @return array
      */
-    protected function prepareParameters($httpMethod, $url, array $parameters = [])
+    protected function prepareParameters($httpMethod, $endpoint, array $parameters = [])
     {
         $prepared = [
             'headers' => array_merge($parameters['headers'] ?? [], [
-                'Authorization' => $this->getAuthHeader($url, $parameters)
+                'Authorization' => $this->getAuthHeader($endpoint, $parameters)
             ])
         ];
 
@@ -203,15 +203,27 @@ abstract class Api implements ApiInterface
      * @param $params
      * @return array
      */
-    private function getAuthHeader($method, $params)
+    protected function getAuthHeader($endpoint, $params)
     {
         $params = array_filter($params, function($a) {
             return !is_object($a);
         });
         ksort($params);
         $paramsString = $this->httpBuildQuery($params);
-        $signature = $this->encodeSignature($method . $paramsString . md5($paramsString));
+        $signature = $this->encodeSignature($endpoint . $paramsString . md5($paramsString));
         return $this->config->getApiKey() . ':' . $signature;
+    }
+
+    /**
+     * Prefixes a string with the given value.
+     * 
+     * @param string $value
+     * @param string $prefix
+     * @return string
+     */
+    protected function prefixString($value, $prefix)
+    {
+        return $prefix . preg_replace('/^(?:' . preg_quote($prefix, '/') . ')+/u', '', $value);
     }
 
     /**

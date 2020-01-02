@@ -38,7 +38,7 @@ class Api extends CoreApi
      */
     protected function filterParameters(array $parameters)
     {
-        return array_filter($parameters, function($value) use ($flags) {
+        return array_filter($parameters, function($value) {
             if (in_array($value, [null, ''], true)) {
                 return false;
             }
@@ -53,7 +53,7 @@ class Api extends CoreApi
      */
     public function getBalance()
     {
-        return $this->_get('/v1/info/balance/');
+        return $this->_get('v1/info/balance/');
     }
 
     /**
@@ -65,7 +65,7 @@ class Api extends CoreApi
      */
     public function getPrice($number, $callerId = null)
     {
-        return $this->_get('/v1/info/price/', $this->filterParameters([
+        return $this->_get('v1/info/price/', $this->filterParameters([
                             'number' => $number
                             , 'caller_id' => $callerId
         ]));
@@ -78,7 +78,7 @@ class Api extends CoreApi
      */
     public function getTimezone()
     {
-        return $this->_get('/v1/info/timezone/');
+        return $this->_get('v1/info/timezone/');
     }
 
     /**
@@ -88,7 +88,7 @@ class Api extends CoreApi
      */
     public function getTariff()
     {
-        return $this->_get('/v1/tariff/');
+        return $this->_get('v1/tariff/');
     }
 
     /**
@@ -108,7 +108,7 @@ class Api extends CoreApi
      */
     public function requestCallback($from, $to, $sip = null, $predicted = null)
     {
-        return $this->_get('/v1/request/callback/', $this->filterParameters([
+        return $this->_get('v1/request/callback/', $this->filterParameters([
                             'from' => $from
                             , 'to' => $to
                             , 'sip' => $sip
@@ -123,7 +123,7 @@ class Api extends CoreApi
      */
     public function getSipList()
     {
-        return $this->_get('/v1/sip/');
+        return $this->_get('v1/sip/');
     }
 
     /**
@@ -133,7 +133,7 @@ class Api extends CoreApi
      */
     public function getSipStatus($sip)
     {
-        return $this->_get("/v1/sip/$sip/status/");
+        return $this->_get("v1/sip/$sip/status/");
     }
 
     /**
@@ -145,7 +145,7 @@ class Api extends CoreApi
      */
     public function setSipCallerId($id, $number)
     {
-        return $this->_put('/v1/sip/callerid/', [
+        return $this->_put('v1/sip/callerid/', [
                     'id' => $id
                     , 'number' => $number
         ]);
@@ -159,7 +159,7 @@ class Api extends CoreApi
      */
     public function getSipRedirection($id = null)
     {
-        return $this->_get('/v1/sip/redirection/', $this->filterParameters([
+        return $this->_get('v1/sip/redirection/', $this->filterParameters([
                             'id' => $id
         ]));
     }
@@ -173,7 +173,7 @@ class Api extends CoreApi
      */
     public function setSipRedirectionStatus($id, $status)
     {
-        return $this->_put('/v1/sip/redirection/', [
+        return $this->_put('v1/sip/redirection/', [
                     'id' => $id
                     , 'status' => $status
         ]);
@@ -189,7 +189,7 @@ class Api extends CoreApi
      */
     public function setSipRedirectionNumber($id, $type, $number)
     {
-        return $this->_put('/v1/sip/redirection/', [
+        return $this->_put('v1/sip/redirection/', [
                     'id' => $id
                     , 'type' => $type
                     , 'number' => $number
@@ -203,7 +203,7 @@ class Api extends CoreApi
      */
     public function getDirectNumbers()
     {
-        return $this->_get('/v1/direct_numbers/');
+        return $this->_get('v1/direct_numbers/');
     }
 
     /**
@@ -213,7 +213,7 @@ class Api extends CoreApi
      */
     public function getPbxExtensionList()
     {
-        return $this->_get('/v1/pbx/internal/');
+        return $this->_get('v1/pbx/internal/');
     }
 
     /**
@@ -223,7 +223,7 @@ class Api extends CoreApi
      */
     public function getPbxExtensionStatus($pbxId)
     {
-        return $this->_get("/v1/pbx/internal/$pbxId/status");
+        return $this->_get("v1/pbx/internal/$pbxId/status");
     }
 
     /**
@@ -243,7 +243,7 @@ class Api extends CoreApi
      */
     public function setPbxExtensionRecordingStatus($pbxId, $status, $email = null)
     {
-        return $this->_put('/v1/pbx/internal/recording/', $this->filterParameters([
+        return $this->_put('v1/pbx/internal/recording/', $this->filterParameters([
                             'id' => $pbxId
                             , 'status' => $status
                             , 'email' => $email
@@ -266,7 +266,7 @@ class Api extends CoreApi
      */
     public function getPbxRecordRequest($callId = null, $pbxCallId = null, $lifetime = null)
     {
-        return $this->_get('/v1/pbx/record/request/', $this->filterParameters([
+        return $this->_get('v1/pbx/record/request/', $this->filterParameters([
                             'call_id' => $callId
                             , 'pbx_call_id' => $pbxCallId
                             , 'lifetime' => $lifetime
@@ -287,7 +287,7 @@ class Api extends CoreApi
      */
     public function enablePbxRedirection($pbxNumber, $type, $destination, $condition, $setCallerId = null, $voicemailGreeting = null, $greetingFile = null)
     {
-        return $this->_post('/v1/pbx/redirection/', $this->filterParameters([
+        return $this->_post('v1/pbx/redirection/', $this->filterParameters([
                             'pbx_number' => $pbxNumber
                             , 'status' => 'on'
                             , 'type' => $type
@@ -307,7 +307,7 @@ class Api extends CoreApi
      */
     public function disablePbxRedirection($pbxNumber)
     {
-        return $this->_post('/v1/pbx/redirection/', [
+        return $this->_post('v1/pbx/redirection/', [
                     'pbx_number' => $pbxNumber
                     , 'status' => 'off'
         ]);
@@ -321,7 +321,7 @@ class Api extends CoreApi
      */
     public function getPbxRedirection($pbxNumber)
     {
-        return $this->_get('/v1/pbx/redirection/', [
+        return $this->_get('v1/pbx/redirection/', [
                     'pbx_number' => $pbxNumber
         ]);
     }
@@ -353,7 +353,7 @@ class Api extends CoreApi
      */
     public function getStatistics($start, $end, array $parameters = [])
     {
-        return $this->_get('/v1/statistics/', array_merge([
+        return $this->_get('v1/statistics/', array_merge([
                     'start' => $start
                     , 'end' => $end
                                 ], $parameters));
@@ -370,7 +370,7 @@ class Api extends CoreApi
      */
     public function getPbxStatistics($start, $end, $version = 2, array $parameters = [])
     {
-        return $this->_get('/v1/statistics/pbx/', array_merge([
+        return $this->_get('v1/statistics/pbx/', array_merge([
                     'start' => $start
                     , 'end' => $end
                     , 'version' => $version
@@ -387,7 +387,7 @@ class Api extends CoreApi
      */
     public function getCallbackWidgetStatistics($start, $end, $widgetId = null)
     {
-        return $this->_get('/v1/statistics/callback_widget/', $this->filterParameters([
+        return $this->_get('v1/statistics/callback_widget/', $this->filterParameters([
                             'start' => $start
                             , 'end' => $end
                             , 'widget_id' => $widgetId
@@ -406,7 +406,7 @@ class Api extends CoreApi
      */
     public function numbersLookup($numbers)
     {
-        return $this->_post('/v1/info/number_lookup/', [
+        return $this->_post('v1/info/number_lookup/', [
                     'numbers' => $numbers
         ]);
     }
