@@ -56,7 +56,7 @@ abstract class Api implements ApiInterface
      */
     public function baseUrl()
     {
-        return 'https://api.zadarma.com';
+        return 'https://api.novofone.com';
     }
 
     /**
